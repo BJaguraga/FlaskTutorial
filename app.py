@@ -15,6 +15,7 @@ def index(name):
 def float_num(post_id):
     return 'Float is {}'.format(post_id)
 
+
 if __name__ == '__main__':
     app.debug = True
     app.run()
