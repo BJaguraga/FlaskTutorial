@@ -1,24 +1,32 @@
-from flask import Flask, redirect, request, render_template
-app = Flask(__name__)
+from flask import Flask, redirect, request, render_template, url_for
+
 
 ''' adding support for int and float '''
 
-try:
-
-    @app.route('/getint/<int:name>')
-    def index(name):
-        if name == 10:
-            return 'Salam welcome . Your lucky number is  %s'%name
-        return 'hello salam alaikum  %s' %name
+app = Flask(__name__)
 
 
-    @app.route('/getfloat/<float:post_id>')
-    def float_num(post_id):
-        return 'Float is {}'.format(post_id)
+@app.route('/')
+def index():
+    return render_template('login.html')
 
 
-    if __name__ == '__main__':
-        app.debug = True
+@app.route('/success/<name>')
+def success(name):
+    file = open('test.txt', 'a+')
+    file.write(name)
+    return 'welcome %s' % name
+
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    if request.method == 'POST':
+        user = request.form['nm']
+        return redirect(url_for('success', name=user))
+    else:
+        user = request.args.get('nm')
+        return redirect(url_for('success', name=user))
+
+if __name__ == '__main__':
+    app.debug = True
     app.run()
-except ValueError:
-    print('error in app')
